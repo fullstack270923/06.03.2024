@@ -31,6 +31,38 @@ const server = http.createServer((request, response) => {
                                             </html>
                                             `)
     }
+    else if (request.url == '/customers' && request.method == 'GET') {
+        response.statusCode = 200;
+        response.setHeader('Content-Type', 'text/html')
+        const customer = {
+            "id": 123456,
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "phone": "555-1234-567",
+            "address": {
+                "street": "123 Elm Street",
+                "city": "Anytown",
+                "state": "Anystate",
+                "zipCode": "12345"
+            }
+        }
+        response.end(`${JSON.stringify(customer)}`)
+    }
+    else if (request.url == '/customers' && request.method == 'POST') {
+        response.statusCode = 204;
+        response.setHeader('Content-Type', 'text/html')
+        response.end(`You sent Post to /customers`)
+    }    
+    else if (request.url == '/customers' && request.method == 'PUT') {
+        response.statusCode = 200;
+        response.setHeader('Content-Type', 'text/html')
+        response.end(`You sent Put to /customers`)
+    }      
+    else if (request.url == '/customers' && request.method == 'DELETE') {
+        response.statusCode = 200;
+        response.setHeader('Content-Type', 'text/html')
+        response.end(`You sent Delete to /customers`)
+    }          
     else {
         response.statusCode = 404;
         response.setHeader('Content-Type', 'text/html')
@@ -39,7 +71,7 @@ const server = http.createServer((request, response) => {
                                                 <title>ERROR</title>
                                             </head>
                                             <body>
-                                                <h1 style='color:red'>404: page http://localhost:${request.url} does not exist</h1>
+                                                <h1 style='color:red'>404: page http://localhost:${request.url} ${request.method} does not exist</h1>
                                             </body>
                                             </html>
                                             `)
