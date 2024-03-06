@@ -33,7 +33,7 @@ const server = http.createServer((request, response) => {
     }
     else if (request.url == '/customers' && request.method == 'GET') {
         response.statusCode = 200;
-        response.setHeader('Content-Type', 'text/html')
+        response.setHeader('Content-Type', 'application/json')
         const customer = {
             "id": 123456,
             "name": "Jane Doe",
