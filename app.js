@@ -39,7 +39,7 @@ const server = http.createServer((request, response) => {
                                                 <title>ERROR</title>
                                             </head>
                                             <body>
-                                                <h1 style='color:red'>404: page http://localhost:${request.url} not exist</h1>
+                                                <h1 style='color:red'>404: page http://localhost:${request.url} does not exist</h1>
                                             </body>
                                             </html>
                                             `)
