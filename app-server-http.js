@@ -1,20 +1,9 @@
 const http = require('http');
 const port = 3000
-const knex = require('knex')
-
-const data_base = knex({
-    client: 'pg',
-    connection: {
-        host: 'localhost',
-        user: 'postgres',
-        password: 'admin',
-        database: 'postgres'
-    }
-})
 
 // this function will run everytime a browser 
 // or a POSTMAN tries to connect to my server ...
-const server = http.createServer(async (request, response) => {
+const server = http.createServer((request, response) => {
     console.log(request.url);
     if (request.url == '/') {
         response.statusCode = 200;
@@ -42,43 +31,34 @@ const server = http.createServer(async (request, response) => {
                                             </html>
                                             `)
     }
-    else if (request.url == '/create-table' && request.method == 'POST') {
-        // run create table query
-    }
-    else if (request.url == '/employees/1' && request.method == 'GET') {
-        // return employee with id == 1
-    }
-    else if (request.url == '/employees' && request.method == 'GET') {
+    else if (request.url == '/customers' && request.method == 'GET') {
         response.statusCode = 200;
         response.setHeader('Content-Type', 'application/json')
-
-        const employees = await data_base.raw("select * from company")
-        employees.rows = employees.rows.map(e =>  
-            {
-            e.address = e.address.trimEnd();
-            return e;
-        })
-        // for experts - shortcut:
-        //({ ...e, address: e.address.trimEnd() } ))
-
-        console.log(employees.rows);
-
-        response.end(`${JSON.stringify(employees.rows)}`)
+        const customer = {
+            "id": 123456,
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "phone": "555-1234-567",
+            "address": {
+                "street": "123 Elm Street",
+                "city": "Anytown",
+                "state": "Anystate",
+                "zipCode": "12345"
+            }
+        }
+        response.end(`${JSON.stringify(customer)}`)
     }
-    else if (request.url == '/employees' && request.method == 'POST') {
-        // run the insert query with 5 employees
+    else if (request.url == '/customers' && request.method == 'POST') {
         response.statusCode = 201;
         response.setHeader('Content-Type', 'text/html')
         response.end(`You sent Post to /customers`)
     }    
-    else if (request.url == '/employees' && request.method == 'PUT') {
+    else if (request.url == '/customers' && request.method == 'PUT') {
         response.statusCode = 200;
         response.setHeader('Content-Type', 'text/html')
         response.end(`You sent Put to /customers`)
     }      
-    else if (request.url == '/employees' && request.method == 'DELETE') {
-        // delete the table -- drop table
-
+    else if (request.url == '/customers' && request.method == 'DELETE') {
         response.statusCode = 200;
         response.setHeader('Content-Type', 'text/html')
         response.end(`You sent Delete to /customers`)

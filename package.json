@@ -5,9 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js",
+    "server-nodb": "nodemon app-server-http.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "knex": "^3.1.0",
+    "pg": "^8.11.3",
+    "sqlite3": "^5.1.7"
+  }
 }
