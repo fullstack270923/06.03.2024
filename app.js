@@ -53,7 +53,13 @@ const server = http.createServer(async (request, response) => {
     else if (request.url == '/employees/1' && request.method == 'GET') {
         // return employee with id == 1
         const employee = await data_base.raw(`select * from company where id = 1`)
-        console.log(employee);        
+        console.log(employee);     
+        employee.rows.map(e =>  
+            {
+            e.address = e.address.trimEnd();
+            return e;
+        })        
+        response.end(`${JSON.stringify(employee.rows)}`)   
     }
     else if (request.url == '/employees' && request.method == 'GET') {
         response.statusCode = 200;
