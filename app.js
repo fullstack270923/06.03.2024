@@ -50,17 +50,6 @@ const server = http.createServer(async (request, response) => {
         response.statusCode = 201;
         response.setHeader('Content-Type', 'application/json')
     }
-    else if (request.url == '/employees/1' && request.method == 'GET') {
-        // return employee with id == 1
-        const employee = await data_base.raw(`select * from company where id = 1`)
-        console.log(employee);     
-        employee.rows.map(e =>  
-            {
-            e.address = e.address.trimEnd();
-            return e;
-        })        
-        response.end(`${JSON.stringify(employee.rows)}`)   
-    }
     else if (request.url == '/employees' && request.method == 'GET') {
         response.statusCode = 200;
         response.setHeader('Content-Type', 'application/json')
@@ -78,6 +67,18 @@ const server = http.createServer(async (request, response) => {
 
         response.end(`${JSON.stringify(employees.rows)}`)
     }
+    else if (request.url.startsWith('/employees/') && request.method == 'GET') {
+        // return employee with id == 1
+        const id = request.url.split('/')[2];
+        const employee = await data_base.raw(`select * from company where id = ${id}`)
+        console.log(employee);     
+        employee.rows.map(e =>  
+            {
+            e.address = e.address.trimEnd();
+            return e;
+        })        
+        response.end(`${JSON.stringify(employee.rows)}`)   
+    }    
     else if (request.url == '/employees' && request.method == 'POST') {
         // run the insert query with 5 employees
         `INSERT INTO company (name,age,address,salary)
