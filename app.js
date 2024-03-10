@@ -43,10 +43,17 @@ const server = http.createServer(async (request, response) => {
                                             `)
     }
     else if (request.url == '/create-table' && request.method == 'POST') {
-        // run create table query
+        await data_base.raw(`CREATE TABLE company (id SERIAL PRIMARY KEY, name TEXT NOT NULL UNIQUE,`+
+        `age INT NOT NULL,`+
+        `address CHAR(50),`+
+        `salary REAL);`);
+        response.statusCode = 201;
+        response.setHeader('Content-Type', 'application/json')
     }
     else if (request.url == '/employees/1' && request.method == 'GET') {
         // return employee with id == 1
+        const employee = await data_base.raw(`select * from company where id = 1`)
+        console.log(employee);        
     }
     else if (request.url == '/employees' && request.method == 'GET') {
         response.statusCode = 200;
@@ -67,6 +74,22 @@ const server = http.createServer(async (request, response) => {
     }
     else if (request.url == '/employees' && request.method == 'POST') {
         // run the insert query with 5 employees
+        `INSERT INTO company (name,age,address,salary)
+        VALUES ('Paul', 32, 'California', 20000.00);
+        INSERT INTO company (name,age,address,salary)
+        VALUES ('Allen', 25, 'Texas', 15000.00);
+        INSERT INTO company (name,age,address,salary)
+        VALUES ('Teddy', 23, 'Norway', 20000.00);
+        INSERT INTO company (name,age,address,salary)
+        VALUES ('Mark', 25, 'Rich-Mond ', 65000.00);
+        INSERT INTO company (name,age,address,salary)
+        VALUES ('David', 27, 'Texas', 85000.00);
+        INSERT INTO company (name,age,address,salary)
+        VALUES ('Kim', 22, 'South-Hall', 45000.00);`
+            .replaceAll('\n    ', '')
+            .split(';')
+            .filter(query => query)
+            .forEach(async query => { await data_base.raw(query + ';') })
         response.statusCode = 201;
         response.setHeader('Content-Type', 'text/html')
         response.end(`You sent Post to /customers`)
@@ -78,7 +101,7 @@ const server = http.createServer(async (request, response) => {
     }      
     else if (request.url == '/employees' && request.method == 'DELETE') {
         // delete the table -- drop table
-
+        await data_base.raw(`DROP TABLE company;`);
         response.statusCode = 200;
         response.setHeader('Content-Type', 'text/html')
         response.end(`You sent Delete to /customers`)
